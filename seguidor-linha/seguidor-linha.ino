@@ -3,11 +3,9 @@ HCSR04 hc(3,2);
 
 #define infra_0 A0
 #define infra_1 A1
-#define infra_2 A2
-#define infra_3 A3
-#define infra_4 A4
-#define infra_5 A5
 int infra[2];
+
+
 
 #define in1 9
 #define in2 8
@@ -34,10 +32,6 @@ void setup() {
   pinMode(mot_r , OUTPUT);
 
   pinMode(infra_1,INPUT);
-  pinMode(infra_2,INPUT);
-  pinMode(infra_3,INPUT);
-  pinMode(infra_4,INPUT);
-  pinMode(infra_5,INPUT);
   pinMode(infra_0,INPUT);
 
 
@@ -49,36 +43,25 @@ void setup() {
 void loop() {
   distancia = hc.dist();
 
+  Serial.print(digitalRead(infra_0));
+   Serial.print("\t");
+   Serial.println(digitalRead(infra_1) );
+
   infra[0] = digitalRead(infra_0);
   infra[1] = digitalRead(infra_1);
-  infra[2] = digitalRead(infra_2);
-  infra[3] = digitalRead(infra_3);
-  infra[4] = digitalRead(infra_4);
-  infra[5] = digitalRead(infra_5);
 
-  
 
-  if (infra[5] == 0 && infra[4] == 1 && infra[3] == 1 && infra[2] == 0 && infra[1] == 0 &&infra[0] == 0  )
-  {
-    Serial.println("curva leve esquerda");
-    andar_esquerda(0.55);
-  }
-  else if ( infra[5] == 0 && infra[4] == 0 && infra[3] == 0 && infra[2] == 1 && infra[1] == 1 && infra[0] == 0 )
-  {
-     Serial.println("curva leve direita");
-    andar_direita(0.55);
-  }
-  else if ( infra[5] == 1 && infra[4] == 1 && infra[3] == 0 && infra[2] == 0 && infra[1] == 0 && infra[0] == 0)
+   if ( infra[0] == 1 && infra[1] == 0 )
   {
      Serial.println("curva esquerda");
-    andar_esquerda(0.35);
+    andar_esquerda(0.45);
   }
-  else if ( infra[5] == 0 && infra[4] == 0 && infra[3] == 0 && infra[2] == 0 && infra[1] == 1 && infra[0] == 1 )
+  else if ( infra[0] == 0 && infra[1] == 1)
   {
      Serial.println("curva leve direita");
-    andar_direita(0.35);
+    andar_direita(0.45);
   }
-  else if (infra[5] == 0 && infra[4] == 0 && infra[3] == 1 && infra[2] == 1 && infra[1] == 0 && infra[0] == 0)
+  else if (infra[0] == 0 && infra[1] == 0 )
   {
     Serial.println("reto");
     andar_frente();
