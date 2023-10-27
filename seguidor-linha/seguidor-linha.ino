@@ -7,7 +7,7 @@ HCSR04 hc(3,2);
 #define infra_3 A3
 #define infra_4 A4
 #define infra_5 A5
-int infra[2];
+int infra[6];
 
 #define in1 9
 #define in2 8
@@ -56,32 +56,35 @@ void loop() {
   infra[4] = digitalRead(infra_4);
   infra[5] = digitalRead(infra_5);
 
-  
+  if (distancia < 8)
+  {
+    contornar();
+  }
 
-  if (infra[5] == 0 && infra[4] == 1 && infra[3] == 1 && infra[2] == 0 && infra[1] == 0 &&infra[0] == 0  )
+  if (infra[5] == 0 && infra[4] == 1 &&  infra[1] == 0 &&infra[0] == 0  )
   {
     Serial.println("curva leve esquerda");
-    andar_esquerda(0.55);
+    andar(0.55, 0.75);
   }
-  else if ( infra[5] == 0 && infra[4] == 0 && infra[3] == 0 && infra[2] == 1 && infra[1] == 1 && infra[0] == 0 )
+  else if ( infra[5] == 0 && infra[4] == 0 && infra[1] == 1 && infra[0] == 0 )
   {
      Serial.println("curva leve direita");
-    andar_direita(0.55);
+    andar(0.75, 0.55);
   }
-  else if ( infra[5] == 1 && infra[4] == 1 && infra[3] == 0 && infra[2] == 0 && infra[1] == 0 && infra[0] == 0)
+  else if ( infra[5] == 1 && infra[4] == 1 && infra[1] == 0 && infra[0] == 0)
   {
      Serial.println("curva esquerda");
-    andar_esquerda(0.35);
+    andar(0.35, 0.8);
   }
-  else if ( infra[5] == 0 && infra[4] == 0 && infra[3] == 0 && infra[2] == 0 && infra[1] == 1 && infra[0] == 1 )
+  else if ( infra[5] == 0 && infra[4] == 0 && infra[1] == 1 && infra[0] == 1 )
   {
      Serial.println("curva leve direita");
-    andar_direita(0.35);
+    andar(0.8 , 0.35);
   }
-  else if (infra[5] == 0 && infra[4] == 0 && infra[3] == 1 && infra[2] == 1 && infra[1] == 0 && infra[0] == 0)
+  else if (infra[5] == 0 && infra[4] == 0 && infra[1] == 0 && infra[0] == 0)
   {
     Serial.println("reto");
-    andar_frente();
+    andar(0.8, 0.8);
   }
 
 
@@ -89,36 +92,59 @@ void loop() {
 
 }
 
-void andar_frente()
-{
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  analogWrite(mot_l, vel_l * 1);
-  analogWrite(mot_l, vel_l * 0.75);
-  analogWrite(mot_r, vel_r * 0.75);
-}
 
-void andar_esquerda(float velo)
+void andar(float velo1, float velo2)
 {
   digitalWrite(in1, HIGH);
   digitalWrite(in2, LOW);
   digitalWrite(in3, HIGH);
   digitalWrite(in4, LOW);
   analogWrite(mot_l, vel_l);
-  analogWrite(mot_l, vel_l * velo);
-  analogWrite(mot_r, vel_r * 0.75);
+  analogWrite(mot_l, vel_l * velo1);
+  analogWrite(mot_r, vel_r * velo2);
 }
 
-void andar_direita(float velo)
+
+
+void contornar()
 {
-  digitalWrite(in1, HIGH);
-  digitalWrite(in2, LOW);
-  digitalWrite(in3, HIGH);
-  digitalWrite(in4, LOW);
-  analogWrite(mot_l, vel_l);
-  analogWrite(mot_l, vel_l * 0.75);
-  analogWrite(mot_r, vel_r * velo);
+  int cont = 0;
+  do 
+  {
+   andar(0.0 , 0.6) ;
+   delay(500);
+   andar(0.6, 0.6);
+   delay(2500);
+   andar(0.6 , 0.0);
+   delay(500);
+
+   cont++;
+
+  distancia = hc.dist();
+  }while (distancia < 8 );
+   
+    andar(0.6, 0.6);
+   delay(2500);
+   andar(0.6 , 0.0);
+   delay(500);
+
+  do 
+  {
+   
+   andar(0.0 , 0.6) ;
+   delay(500);
+   andar(0.6,0.6);
+   delay(2500);
+   andar(0.6 , 0.0);
+
+   cont++;
+
+  distancia = hc.dist();
+  }while (distancia < 8 );
+
+  andar(0.6 , 0.6);
+  delay(2500 * cont);
+  andar(0.0 , 0.6);
+
 }
 
