@@ -16,9 +16,10 @@ int infra[6];
 #define mot_l 5
 #define mot_r 6
 
+int turn = 1270;
 
 float vel_l = 0x80;
-float vel_r = 0x69;
+float vel_r = 0x65;
 
 float distancia;
 
@@ -64,12 +65,12 @@ void loop() {
   if (infra[5] == 0 && infra[4] == 1 &&  infra[1] == 0 &&infra[0] == 0  )
   {
     Serial.println("curva leve esquerda");
-    andar(0.55, 0.75);
+    andar(0.55, 0.8);
   }
   else if ( infra[5] == 0 && infra[4] == 0 && infra[1] == 1 && infra[0] == 0 )
   {
      Serial.println("curva leve direita");
-    andar(0.75, 0.55);
+    andar(0.8, 0.55);
   }
   else if ( infra[5] == 1 && infra[4] == 1 && infra[1] == 0 && infra[0] == 0)
   {
@@ -112,11 +113,11 @@ void contornar()
   do 
   {
    andar(0.0 , 0.6) ;
-   delay(500);
+   delay(turn);
    andar(0.6, 0.6);
    delay(2500);
    andar(0.6 , 0.0);
-   delay(500);
+   delay(turn);
 
    cont++;
 
@@ -126,13 +127,13 @@ void contornar()
     andar(0.6, 0.6);
    delay(2500);
    andar(0.6 , 0.0);
-   delay(500);
+   delay(turn);
 
   do 
   {
    
    andar(0.0 , 0.6) ;
-   delay(500);
+   delay(turn);
    andar(0.6,0.6);
    delay(2500);
    andar(0.6 , 0.0);
